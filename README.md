@@ -8,7 +8,12 @@ A Donchian breakout rider that trades cbBTC/USDC on one-minute bars. It buys onl
 
 ## Dev result
 
-Local grade on the kit's frozen 24h dev window: net PnL **+$21.91** over 5 trades, max drawdown 2.10%. The main trade buys bar 180 and sells bar 777 for +$20.73, riding the morning rise; the other round trips are near breakeven. The bot trades in every 6-hour block of the window. Buy-and-hold makes +$32.17 on the same tape; the DP-fitted dev leaders make up to $151, a number that cannot generalise to the unseen race window.
+Local grade on the kit's frozen 24h dev window (protocol harness, run twice with
+byte-identical action logs): net PnL **+$21.67** over 5 trades, max drawdown 2.10%.
+The main trade buys bar 180 and sells bar 777 for +$20.73, riding the morning rise;
+the other round trips are near breakeven. The bot trades in every 6-hour block of
+the window. Buy-and-hold makes +$32.17 on the same tape; the DP-fitted dev leaders
+make up to $151, a number that cannot generalise to the unseen race window.
 
 ## Run it
 

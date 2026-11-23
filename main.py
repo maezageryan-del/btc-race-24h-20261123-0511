@@ -18,9 +18,9 @@
 #
 # Exits, once in (minimum hold 15 bars): the close falls below the lowest close
 # of the previous 180 bars, or 2% under the highest close since entry (trailing
-# stop), or the trade has been held 180 bars without gaining 0.3% (dead-money
-# exit -- it stops the flat-tail chop from bleeding the bot dry). No take-profit
-# cap: the day's main move is allowed to run.
+# stop), or the trade has been held 180 bars without gaining 0.3% over its fill
+# price (dead-money exit -- it stops the flat-tail chop from bleeding the bot
+# dry). No take-profit cap: the day's main move is allowed to run.
 #
 # Backtest on the kit's frozen dev window with a faithful local simulator
 # (fee, slippage and impact modelled per the rules): net PnL +$21.91 over
@@ -87,7 +87,14 @@ class Rider:
         qty = holding.qty if holding is not None else 0
         if qty > 0 and self.entry_seq is None:
             self.entry_seq = state.seq
-            self.entry_ref = close
+            # True cost basis when the batch reports the buy fill; otherwise
+            # the fill bar's close, which is within one bar's move of it.
+            fill_price = None
+            for f in batch.get("fills", []):
+                if f.get("symbol") == SYMBOL and f.get("side") == "buy" \
+                        and f.get("status") == "filled":
+                    fill_price = int(f["price"])
+            self.entry_ref = fill_price if fill_price else close
             self.peak = close
         if qty == 0:
             self.entry_seq = None
